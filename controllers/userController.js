@@ -86,10 +86,11 @@ const login=async(req,res)=>{
         if(!isMatch)
             return res.json({success:false,message:"Incorrect password"});
         const token=createTOken(user._id);
-        user.notifications.push({message:"You logged in"});
-        //   await user.save()
+
+        //add a notification
+        user.notifications.push({message:"You logged in",createdAt:Date.now()});
+          await user.save()
             user.password='';
-            console.log(user);
             
         res.json({success:true,token,user,message:`Welcome back ${user.name}`});
     }catch(error){
