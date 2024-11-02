@@ -54,7 +54,6 @@ const signIn=async(req,res)=>{
        const newUser=new User({...user,password:hashedPassword,role:'admin'});
        newUser.notifications.push({message:"yayy, Welcome to Staffify👋🏼"});
        await newUser.save();
-       console.log(newUser);
        
        const token=createTOken(newUser._id);
        res.json({success:true,user:newUser,token});
@@ -79,7 +78,7 @@ const login=async(req,res)=>{
                 path:'comments.createdBy'
             },
           })
-          .lean();
+          ;
           if(!user)
           return  res.json({success:false, message:"User doesn't exist"});
         const isMatch=await bcrypt.compare(password,user.password);
@@ -89,6 +88,7 @@ const login=async(req,res)=>{
 
         //add a notification
         user.notifications.push({message:"You logged in",createdAt:Date.now()});
+        
           await user.save()
             user.password='';
             
